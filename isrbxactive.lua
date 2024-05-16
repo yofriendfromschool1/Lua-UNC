@@ -1,25 +1,25 @@
-local UIS = game:GetService("UserInputService")
+getgenv().UISFTE = game:GetService("UserInputService")
 
-local IsWindowFocused = true
-local Thread = coroutine.running()
-local con1 = UIS.InputChanged:Connect(function()
-	coroutine.resume(Thread)
+getgenv().IsWindowFocuseddsa = true
+getgenv().dsaThread = coroutine.running()
+getgenv().con1 = getgenv().UISFTE.InputChanged:Connect(function()
+	coroutine.resume(getgenv().dsaThread)
 end)
-local con2 = UIS.WindowFocused:Connect(function()
-	coroutine.resume(Thread)
+getgenv().con2 = UIS.WindowFocused:Connect(function()
+	coroutine.resume(getgenv().dsaThread)
 end)
 coroutine.yield()
-con1:Disconnect()
-con2:Disconnect()
-IsWindowFocused = true
-UIS.WindowFocused:Connect(function()
-	IsWindowFocused = true
+getgenv().con1:Disconnect()
+getgenv()con2:Disconnect()
+getgenv().IsWindowFocuseddsa = true
+getgenv().UISFTE.WindowFocused:Connect(function()
+	getgenv().IsWindowFocuseddsa = true
 end)
-UIS.WindowFocusReleased:Connect(function()
-	IsWindowFocused = false
+getgenv().UISFTE.WindowFocusReleased:Connect(function()
+	getgenv().IsWindowFocuseddsa = false
 end)
 
 getgenv().isrbxactive = function()
-	return IsWindowFocused
+	return getgenv().IsWindowFocuseddsa
 end
-getgenv().isgameactive
+getgenv().isgameactive = getgenv().isrbxactive
