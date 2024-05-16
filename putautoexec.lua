@@ -2100,6 +2100,8 @@ getgenv().rconsoleclear = function()
 		error("No Console Found.")
 	else
 		getgenv().rconsoleConverted["_TextBox"].Text = ""
+		getgenv().rconsoletablerem = {}
+		makeonestring = ""
 	end
 end
 getgenv().rconsoleprint = function(text, color)
@@ -2114,6 +2116,57 @@ getgenv().rconsoleprint = function(text, color)
 		table.insert(getgenv().rconsoletablerem, text)
 		makeonestring = table.concat(getgenv().rconsoletablerem, "")
 		getgenv().rconsoleConverted["_TextBox"].Text = makeonestring
+		if getgenv().rconsoleConverted["_TextBox"].TextColor3 ~= Color3.fromRGB(204.0000182390213, 204.0000182390213, 204.0000182390213) then
+			getgenv().rconsoleConverted["_TextBox"].TextColor3 = Color3.fromRGB(204.0000182390213, 204.0000182390213, 204.0000182390213)
+		end
+	end
+end
+getgenv().rconsoleerr = function(text, color)
+	text = text .. "\n"
+	if not par:FindFirstChild("rconsole") then
+		rconsolecreate()
+		task.wait(0.25)
+		table.insert(getgenv().rconsoletablerem, text)
+		makeonestring = table.concat(getgenv().rconsoletablerem, "")
+		getgenv().rconsoleConverted["_TextBox"].Text = makeonestring
+		getgenv().rconsoleConverted["_TextBox"].TextColor3 = Color3.fromRGB(255, 0, 0)
+	else
+		table.insert(getgenv().rconsoletablerem, text)
+		makeonestring = table.concat(getgenv().rconsoletablerem, "")
+		getgenv().rconsoleConverted["_TextBox"].Text = makeonestring
+		getgenv().rconsoleConverted["_TextBox"].TextColor3 = Color3.fromRGB(255, 0, 0)
+	end
+end
+getgenv().rconsoleinfo = function(text, color)
+	text = text .. "\n"
+	if not par:FindFirstChild("rconsole") then
+		rconsolecreate()
+		task.wait(0.25)
+		table.insert(getgenv().rconsoletablerem, text)
+		makeonestring = table.concat(getgenv().rconsoletablerem, "")
+		getgenv().rconsoleConverted["_TextBox"].Text = makeonestring
+		getgenv().rconsoleConverted["_TextBox"].TextColor3 = Color3.fromRGB(0, 204, 255)
+	else
+		table.insert(getgenv().rconsoletablerem, text)
+		makeonestring = table.concat(getgenv().rconsoletablerem, "")
+		getgenv().rconsoleConverted["_TextBox"].Text = makeonestring
+		getgenv().rconsoleConverted["_TextBox"].TextColor3 = Color3.fromRGB(0, 204, 255)
+	end
+end
+getgenv().rconsolewarn = function(text, color)
+	text = text .. "\n"
+	if not par:FindFirstChild("rconsole") then
+		rconsolecreate()
+		task.wait(0.25)
+		table.insert(getgenv().rconsoletablerem, text)
+		makeonestring = table.concat(getgenv().rconsoletablerem, "")
+		getgenv().rconsoleConverted["_TextBox"].Text = makeonestring
+		getgenv().rconsoleConverted["_TextBox"].TextColor3 = Color3.fromRGB(238, 255, 0)
+	else
+		table.insert(getgenv().rconsoletablerem, text)
+		makeonestring = table.concat(getgenv().rconsoletablerem, "")
+		getgenv().rconsoleConverted["_TextBox"].Text = makeonestring
+		getgenv().rconsoleConverted["_TextBox"].TextColor3 = Color3.fromRGB(238, 255, 0)
 	end
 end
 getgenv().rconsoledestroy = function()
@@ -2125,7 +2178,18 @@ getgenv().rconsoledestroy = function()
 end
 getgenv().rconsolesettitle = function(text)
 	if not par:FindFirstChild("rconsole") then
-		error("No Console Found.")
+		rconsolecreate()
+		task.wait(0.25)
+		getgenv().rconsoleConverted["_TextLabel"].Text = text
+	else
+		getgenv().rconsoleConverted["_TextLabel"].Text = text
+	end
+end
+getgenv().rconsolename = function(text)
+	if not par:FindFirstChild("rconsole") then
+		rconsolecreate()
+		task.wait(0.25)
+		getgenv().rconsoleConverted["_TextLabel"].Text = text
 	else
 		getgenv().rconsoleConverted["_TextLabel"].Text = text
 	end
