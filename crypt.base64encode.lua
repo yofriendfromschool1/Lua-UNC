@@ -1,5 +1,7 @@
 getgenv().encrypt64k = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
-getgenv().crypt = {}
+if not getgenv().crypt then
+    getgenv().crypt = {}
+end
 getgenv().crypt.base64encode = function(data)
     return ((data:gsub('.', function(x) 
         local r,b='',x:byte()
