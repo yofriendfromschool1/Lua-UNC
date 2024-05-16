@@ -2,7 +2,7 @@
 if not getgenv().debug then
     getgenv().debug = {}
 end
-getgenv().debug.getinfo(thread)
+getgenv().debug.getinfo = function(thread)
  local CurrentLine = tonumber(debug.info(thread, 'l'))
  local Source = debug.info(thread, 's')
  local name = debug.info(thread, 'n')
