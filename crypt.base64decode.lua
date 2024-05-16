@@ -1,3 +1,4 @@
+getgenv().crypt = {}
 getgenv().crypt.base64decode = function(data)
     local b = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
     data = string.gsub(data, '[^'..b..'=]', '')
