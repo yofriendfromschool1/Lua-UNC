@@ -1,6 +1,7 @@
 -- put this in autoexc for 23 unc things will add on or replace some so delete the ones you already have (that is if they work)
 -- 23/83 27%
 -- Shoutout to me (Sky/jazminethecooles2001), luau, and vxsty
+-- if this doesnt work try just executing this or executing the ones u need or one by one or so
 getgenv().clonefunction = function(func)
     return function(...)
         local done = func(...)
