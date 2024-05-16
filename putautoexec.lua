@@ -2370,10 +2370,11 @@ end
 getgenv().setfpscap = function(cap)
 	getgenv().fpscap = cap
 end
+--[[commented out bc it lags hella but it does work if u want it
 getgenv().clock = tick()
 game:GetService("RunService").RenderStepped:Connect(function()
 	while getgenv().clock + 1 / getgenv().fpscap > tick() do end
 	getgenv().clock = tick()
 
 	task.wait()
-end)
+end)]]
