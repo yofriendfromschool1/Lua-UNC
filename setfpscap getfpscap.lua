@@ -1,16 +1,15 @@
-local fpscap = 60
-function setfpscap(cap)
-	fpscap = cap
+getgenv().fpscap = 60
+getgenv().setfpscap = function(cap)
+	getgenv().fpscap = cap
 end
-
-local clock = tick()
+getgenv().clock = tick()
 game:GetService("RunService").RenderStepped:Connect(function()
-	while clock + 1 / fpscap > tick() do end
+	while getgenv().clock + 1 / getgenv().fpscap > tick() do end
 	clock = tick()
 
 	task.wait()
 end)
 
-function getfpscap()
-	return fpscap
+getgenv().getfpscap = function()
+	return getgenv().fpscap
 end
