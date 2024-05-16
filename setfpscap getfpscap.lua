@@ -5,7 +5,7 @@ end
 getgenv().clock = tick()
 game:GetService("RunService").RenderStepped:Connect(function()
 	while getgenv().clock + 1 / getgenv().fpscap > tick() do end
-	clock = tick()
+	getgenv().clock = tick()
 
 	task.wait()
 end)
