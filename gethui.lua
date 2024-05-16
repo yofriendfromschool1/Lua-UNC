@@ -1,0 +1,1 @@
+getgenv().gethui = game:GetService("CoreGui")
