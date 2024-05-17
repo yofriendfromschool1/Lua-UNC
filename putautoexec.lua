@@ -1,5 +1,5 @@
--- put this in autoexc for 23 unc things will add on or replace some so delete the ones you already have (that is if they work)
--- 23/83 27%
+-- put this in autoexc for 44 unc things will add on or replace some so delete the ones you already have (that is if they work)
+-- 44/83 53% NOTE: u need to put queue_on_teleport in ur autoexec
 -- Shoutout to me (Sky/jazminethecooles2001), luau, and vxsty
 -- if this doesnt work try just executing this or executing the ones u need or one by one or so
 getgenv().clonefunction = function(func)
@@ -17,93 +17,7 @@ getgenv().clonefunction = function(func)
     end
 end
 getgenv().cloneref = function(...)
-	local objs = table.pack(...)
-	local res = {}
-	local function clone(obj)
-		if typeof(obj) == "table" then
-			local copy = {}
-			for i,v in pairs(obj) do
-				copy[i] = v
-			end
-			return copy
-		elseif typeof(obj) == "Instance" then
-			if obj ~= game.TweenService then
-				print(obj,"is not a valid member to be cloned.")
-				return obj
-			else
-				local metaInstances = {}
-				local function table_find(t,v)
-					return (table.find(t,v) or t[v]) ~= nil
-				end
-				local function convertToMetaInstance(object,options)
-					if object == game:GetService("TweenService") then return object end
-
-					local options = options or {}
-					local customMethods = options.CustomMethods or {}
-					local blockMethods = options.BlockMethods or {}
-					local metaInstance
-
-					local dest = {customMethods.destroy, customMethods.Destroy}
-					customMethods.destroy = function()
-						for _,v in pairs(dest) do
-							if v then
-								v()
-							end
-						end
-						if not object then
-							local c = {}
-							for i,v in pairs(metaInstances) do
-								if i == metaInstance or not v then continue end
-								c[i] = v
-							end
-							metaInstances = c
-							c = nil
-						else
-							object:Destroy()
-						end
-					end
-					customMethods.Destroy = customMethods.destroy
-
-					metaInstance = setmetatable({},
-					{
-						__index = function(self, index)
-							local found = table_find(customMethods, index)
-							if found then
-								return customMethods[index]
-							else
-								return object[index]
-							end
-						end,
-						__newindex = function(self, index, value)
-							if blockMethods[index] == true then
-								error("Failed to set "..tostring(index).." to "..tostring(value))
-							elseif typeof(blockMethods[index]) == "function" then
-								return blockMethods[index](value)
-							end
-							object[index] = value
-						end,
-						__tostring = function()
-							return tostring(object)
-						end,
-						__metatable = "Metatable is locked!"
-					}
-					)
-
-					metaInstances[metaInstance] = object
-
-					return metaInstance
-					--return object
-				end
-				return metaInstances[obj] or convertToMetaInstance(obj)
-			end
-		else
-			return obj
-		end
-	end
-	for i,v in pairs(objs) do
-		res[#res+1] = clone(v)
-	end
-	return unpack(res)
+	local s, _ = pcall(function() return a:Clone() end) return s and _ or a
 end
 if not getgenv().crypt then
     getgenv().crypt = {}
@@ -140,11 +54,26 @@ getgenv().crypt.base64encode = function(data)
         return getgenv().encrypt64k:sub(c+1,c+1)
     end)..({ '', '==', '=' })[#data%3+1])
 end
--- vxsty made this
-if not getgenv().debug then
-    getgenv().debug = {}
+-- creds to vxsty
+getgenv().crypt.generatebytes = function(size)
+	if type(size) ~= 'number' then
+		return error('missing arguement #1 to \'generatebytes\' (number expected)')
+	end
+	return getgenv().crypt.generatekey(size) -- must run this unc fix first
 end
-getgenv().debug.getinfo = function(thread)
+-- creds to vxsty
+getgenv().crypt.generatekey = function(optionalSize)
+	local key = ''
+	local a = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
+	for i = 1, optionalSize or 44 do
+		local n = math.random(1, #a)
+		key = key .. a:sub(n, n)
+	end
+	return funcs.base64.encode(key)
+end
+-- vxsty made this
+getgenv().debugg = {}
+getgenv().debugg.getinfo = function(thread)
  local CurrentLine = tonumber(debug.info(thread, 'l'))
  local Source = debug.info(thread, 's')
  local name = debug.info(thread, 'n')
@@ -162,18 +91,14 @@ getgenv().debug.getinfo = function(thread)
 end
 -- vxsty made this
 getgenv().getcallingscript = function()
- local s = debug.info(1, 's')
- for i, v in next, game:GetDescendants() do
-  if v:GetFullName() == s then return v end
- end
- return nil
+    local s = debug.info(1, 's')
+    for i, v in next, game:GetDescendants() do
+     if v:GetFullName() == s then return v end
+    end
+    return nil
 end
 getgenv().gethui = function()
-    if cloneref then
-        return cloneref(game:GetService("CoreGui"))
-    else
-        return game:GetService("CoreGui")
-    end
+    return game:GetService("CoreGui")
 end
 getgenv().getscripts = function()
 	local stuff = game:GetDescendants()
@@ -192,7 +117,7 @@ getgenv().hookfunction = function(func, rep)
 	end
 end
 getgenv().identifyexecutor = function()
-    return "Sky's & Luau UNC"
+    return "Sky's, Luau, vxsty UNC"
 end
 getgenv().iscclosure = function(func)
     local toreturn = false
@@ -1820,33 +1745,57 @@ getgenv().messagebox = function(text,caption,style,callback)
         return toreturn
     end
 end
+-- creds to vxsty
+getgenv().mouse1click = function(x, y)
+	local vim = game:GetService('VirtualInputManager');
+    x = x or 0
+	y = y or 0
+	vim:SendMouseButtonEvent(x, y, 0, true, game, false)
+	task.wait()
+	vim:SendMouseButtonEvent(x, y, 0, false, game, false)
+end
+getgenv().mouse2click = function(x, y)
+    local vim = game:GetService('VirtualInputManager');
+	x = x or 0
+	y = y or 0
+	vim:SendMouseButtonEvent(x, y, 1, true, game, false)
+	task.wait()
+	vim:SendMouseButtonEvent(x, y, 1, false, game, false)
+end
+getgenv().mouse1press = function(x, y)
+    local vim = game:GetService('VirtualInputManager');
+	x = x or 0
+	y = y or 0
+	vim:SendMouseButtonEvent(x, y, 0, true, game, false)
+end
+getgenv().mouse1release = function(x, y)
+    local vim = game:GetService('VirtualInputManager');
+	x = x or 0
+	y = y or 0
+	vim:SendMouseButtonEvent(x, y, 0, false, game, false)
+end
+getgenv().mouse2press = function(x, y)
+    local vim = game:GetService('VirtualInputManager');
+	x = x or 0
+	y = y or 0
+	vim:SendMouseButtonEvent(x, y, 1, true, game, false)
+end
+getgenv().mouse2release = function(x, y)
+    local vim = game:GetService('VirtualInputManager');
+	x = x or 0
+	y = y or 0
+	vim:SendMouseButtonEvent(x, y, 1, false, game, false)
+end
+getgenv().mousescroll = function(x, y, a)
+    local vim = game:GetService('VirtualInputManager');
+	x = x or 0
+	y = y or 0
+	a = a and true or false
+	vim:SendMouseWheelEvent(x, y, a, game)
+end
 getgenv().newcclosure = function(func)
     local tab = getgenv()
     getgenv()[#tab+1] = func
-end
--- must have write file
--- put in auto exec
-if not isfolder("queue") then
-    if makefolder then
-        makefolder("queue")
-    end
-end
-if makefolder and writefile and listfiles and delfile and loadstring then
-local rs = math.random(1,999999)
-getgenv().queue_on_teleport = function(code)
-    writefile("queue\\"..tostring(rs)..".lua", code)
-end
---queue_on_teleport("testy")
-local files = listfiles("queue")
-if #files == 0 then
-    return
-end
-for i, v in pairs(files) do
-    pcall(function()
-        loadstring(readfile(v))()
-    end)
-    delfile(v)
-end
 end
 getgenv().rconsoletablerem = {}
 local par = game:GetService("CoreGui")
@@ -2240,146 +2189,155 @@ getgenv().rconsoleinput = function()
 		return toreturn
 	end
 end
-getgenv().setclipboard = function(text)
-    local Converted = {
-        ["_setcliptoclip"] = Instance.new("ScreenGui");
-        ["_TextBox"] = Instance.new("TextBox");
-        ["_LocalScript"] = Instance.new("LocalScript");
-    }
-    
-    Converted["_setcliptoclip"].ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-    Converted["_setcliptoclip"].Name = "setcliptoclip"
-    Converted["_setcliptoclip"].Parent = game:GetService("CoreGui")
-    
-    Converted["_TextBox"].ClearTextOnFocus = false
-    Converted["_TextBox"].CursorPosition = -1
-    Converted["_TextBox"].Font = Enum.Font.SourceSans
-    Converted["_TextBox"].Text = text
-    Converted["_TextBox"].TextColor3 = Color3.fromRGB(0, 0, 0)
-    Converted["_TextBox"].TextSize = 14
-    Converted["_TextBox"].BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    Converted["_TextBox"].BorderColor3 = Color3.fromRGB(0, 0, 0)
-    Converted["_TextBox"].BorderSizePixel = 0
-    Converted["_TextBox"].Position = UDim2.new(0.48038584, 0, 0.471337587, 0)
-    Converted["_TextBox"].Size = UDim2.new(0, 200, 0, 50)
-    Converted["_TextBox"].Parent = Converted["_setcliptoclip"]
-    
-    local fake_module_scripts = {}
-    
-    
-    local function GBGAD_fake_script() -- Fake Script: StarterGui.setcliptoclip.TextBox.LocalScript
-        local script = Instance.new("LocalScript")
-        script.Name = "LocalScript"
-        script.Parent = Converted["_TextBox"]
-        local req = require
-        local require = function(obj)
-            local fake = fake_module_scripts[obj]
-            if fake then
-                return fake()
-            end
-            return req(obj)
-        end
-    
-        script.Parent.FocusLost:Connect(function()
-            script.Parent.Parent:Destroy()
-        end)
-    end
-    
-    coroutine.wrap(GBGAD_fake_script)()
+-- creds to vxsty
+getgenv().httpget = function(url)
+	return game:HttpGet(url)
 end
-getgenv().setrbxclipboard = function(text)
-    local Converted = {
-        ["_setcliptoclip"] = Instance.new("ScreenGui");
-        ["_TextBox"] = Instance.new("TextBox");
-        ["_LocalScript"] = Instance.new("LocalScript");
-    }
-    
-    Converted["_setcliptoclip"].ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-    Converted["_setcliptoclip"].Name = "setcliptoclip"
-    Converted["_setcliptoclip"].Parent = game:GetService("CoreGui")
-    
-    Converted["_TextBox"].ClearTextOnFocus = false
-    Converted["_TextBox"].CursorPosition = -1
-    Converted["_TextBox"].Font = Enum.Font.SourceSans
-    Converted["_TextBox"].Text = text
-    Converted["_TextBox"].TextColor3 = Color3.fromRGB(0, 0, 0)
-    Converted["_TextBox"].TextSize = 14
-    Converted["_TextBox"].BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    Converted["_TextBox"].BorderColor3 = Color3.fromRGB(0, 0, 0)
-    Converted["_TextBox"].BorderSizePixel = 0
-    Converted["_TextBox"].Position = UDim2.new(0.48038584, 0, 0.471337587, 0)
-    Converted["_TextBox"].Size = UDim2.new(0, 200, 0, 50)
-    Converted["_TextBox"].Parent = Converted["_setcliptoclip"]
-    
-    local fake_module_scripts = {}
-    
-    
-    local function GBGAD_fake_script() -- Fake Script: StarterGui.setcliptoclip.TextBox.LocalScript
-        local script = Instance.new("LocalScript")
-        script.Name = "LocalScript"
-        script.Parent = Converted["_TextBox"]
-        local req = require
-        local require = function(obj)
-            local fake = fake_module_scripts[obj]
-            if fake then
-                return fake()
-            end
-            return req(obj)
-        end
-    
-        script.Parent.FocusLost:Connect(function()
-            script.Parent.Parent:Destroy()
-        end)
-    end
-    
-    coroutine.wrap(GBGAD_fake_script)()
+getgenv().httppost = function(url, body, contenttype)
+	return game:HttpPostAsync(url, body, contenttype)
 end
-getgenv().toclipboard = function(text)
-    local Converted = {
-        ["_setcliptoclip"] = Instance.new("ScreenGui");
-        ["_TextBox"] = Instance.new("TextBox");
-        ["_LocalScript"] = Instance.new("LocalScript");
+getgenv().request = function(args)
+	if args.Method == 'GET' then
+		local result = {}
+		local s, getresult = pcall(function()
+			return getgenv().httpget(args.Url)
+		end)
+		result.Body = s and getresult or ''
+		result.Success = s
+		result.StatusCode = s and 200 or 400 -- Inaccurate but works i guess?
+		return result
+	elseif args.Method == 'POST' then
+		local result = {}
+		local s, r = pcall(function()
+			return getgenv().httppost(args.Url, args.Body or '', args.Headers and args.Headers['Content-Type'] and args.Headers['Content-Type'] or 'application/x-www-form-urlencoded')
+		end)
+		result.Success = s
+		result.Body = r
+		result.StatusCode = s and 200 or 400 -- Inaccurate but works i guess?
+		return result
+	else
+		print('script tried to send an http request with a non implemented method', args.Method)
+		return {
+			Success = false
+		}
+	end
+end
+-- creds to vxsty
+getgenv().setclipboard = function(data)
+    local vim = game:GetService('VirtualInputManager');
+    local old = game:GetService("UserInputService"):GetFocusedTextBox()
+    local copy = tostring(data)
+    local gui = Instance.new("ScreenGui", getgenv().gethui())
+    local a = Instance.new('TextBox', gui)
+    a.PlaceholderText = ''
+    a.Text = copy
+    a.ClearTextOnFocus = false
+    a.Size = UDim2.new(.1, 0, .15, 0)
+    a.Position = UDim2.new(10, 0, 10, 0)
+    a:CaptureFocus()
+    a = Enum.KeyCode
+    local Keys = {
+     a.RightControl, a.A
     }
-    
-    Converted["_setcliptoclip"].ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-    Converted["_setcliptoclip"].Name = "setcliptoclip"
-    Converted["_setcliptoclip"].Parent = game:GetService("CoreGui")
-    
-    Converted["_TextBox"].ClearTextOnFocus = false
-    Converted["_TextBox"].CursorPosition = -1
-    Converted["_TextBox"].Font = Enum.Font.SourceSans
-    Converted["_TextBox"].Text = text
-    Converted["_TextBox"].TextColor3 = Color3.fromRGB(0, 0, 0)
-    Converted["_TextBox"].TextSize = 14
-    Converted["_TextBox"].BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    Converted["_TextBox"].BorderColor3 = Color3.fromRGB(0, 0, 0)
-    Converted["_TextBox"].BorderSizePixel = 0
-    Converted["_TextBox"].Position = UDim2.new(0.48038584, 0, 0.471337587, 0)
-    Converted["_TextBox"].Size = UDim2.new(0, 200, 0, 50)
-    Converted["_TextBox"].Parent = Converted["_setcliptoclip"]
-    
-    local fake_module_scripts = {}
-    
-    
-    local function GBGAD_fake_script() -- Fake Script: StarterGui.setcliptoclip.TextBox.LocalScript
-        local script = Instance.new("LocalScript")
-        script.Name = "LocalScript"
-        script.Parent = Converted["_TextBox"]
-        local req = require
-        local require = function(obj)
-            local fake = fake_module_scripts[obj]
-            if fake then
-                return fake()
-            end
-            return req(obj)
-        end
-    
-        script.Parent.FocusLost:Connect(function()
-            script.Parent.Parent:Destroy()
-        end)
+    local Keys2 = {
+     a.RightControl, a.C, a.V
+    }
+    for i, v in ipairs(Keys) do
+     vim:SendKeyEvent(true, v, false, game)
+     task.wait()
     end
-    
-    coroutine.wrap(GBGAD_fake_script)()
+    for i, v in ipairs(Keys) do
+     vim:SendKeyEvent(false, v, false, game)
+     task.wait()
+    end
+    for i, v in ipairs(Keys2) do
+     vim:SendKeyEvent(true, v, false, game)
+     task.wait()
+    end
+    for i, v in ipairs(Keys2) do
+     vim:SendKeyEvent(false, v, false, game)
+     task.wait()
+    end
+    gui:Destroy()
+    if old then old:CaptureFocus() end
+end
+-- creds to vxsty
+getgenv().setrbxclipboard = function(data)
+    local vim = game:GetService('VirtualInputManager');
+    local old = game:GetService("UserInputService"):GetFocusedTextBox()
+    local copy = tostring(data)
+    local gui = Instance.new("ScreenGui", getgenv().gethui())
+    local a = Instance.new('TextBox', gui)
+    a.PlaceholderText = ''
+    a.Text = copy
+    a.ClearTextOnFocus = false
+    a.Size = UDim2.new(.1, 0, .15, 0)
+    a.Position = UDim2.new(10, 0, 10, 0)
+    a:CaptureFocus()
+    a = Enum.KeyCode
+    local Keys = {
+     a.RightControl, a.A
+    }
+    local Keys2 = {
+     a.RightControl, a.C, a.V
+    }
+    for i, v in ipairs(Keys) do
+     vim:SendKeyEvent(true, v, false, game)
+     task.wait()
+    end
+    for i, v in ipairs(Keys) do
+     vim:SendKeyEvent(false, v, false, game)
+     task.wait()
+    end
+    for i, v in ipairs(Keys2) do
+     vim:SendKeyEvent(true, v, false, game)
+     task.wait()
+    end
+    for i, v in ipairs(Keys2) do
+     vim:SendKeyEvent(false, v, false, game)
+     task.wait()
+    end
+    gui:Destroy()
+    if old then old:CaptureFocus() end
+end
+-- creds to vxsty
+getgenv().toclipboard = function(data)
+    local vim = game:GetService('VirtualInputManager');
+    local old = game:GetService("UserInputService"):GetFocusedTextBox()
+    local copy = tostring(data)
+    local gui = Instance.new("ScreenGui", getgenv().gethui())
+    local a = Instance.new('TextBox', gui)
+    a.PlaceholderText = ''
+    a.Text = copy
+    a.ClearTextOnFocus = false
+    a.Size = UDim2.new(.1, 0, .15, 0)
+    a.Position = UDim2.new(10, 0, 10, 0)
+    a:CaptureFocus()
+    a = Enum.KeyCode
+    local Keys = {
+     a.RightControl, a.A
+    }
+    local Keys2 = {
+     a.RightControl, a.C, a.V
+    }
+    for i, v in ipairs(Keys) do
+     vim:SendKeyEvent(true, v, false, game)
+     task.wait()
+    end
+    for i, v in ipairs(Keys) do
+     vim:SendKeyEvent(false, v, false, game)
+     task.wait()
+    end
+    for i, v in ipairs(Keys2) do
+     vim:SendKeyEvent(true, v, false, game)
+     task.wait()
+    end
+    for i, v in ipairs(Keys2) do
+     vim:SendKeyEvent(false, v, false, game)
+     task.wait()
+    end
+    gui:Destroy()
+    if old then old:CaptureFocus() end
 end
 getgenv().fpscap = 60
 getgenv().getfpscap = function()
@@ -2388,11 +2346,199 @@ end
 getgenv().setfpscap = function(cap)
 	getgenv().fpscap = cap
 end
---[[commented out bc it lags hella but it does work if u want it
-getgenv().clock = tick()
+--[[ commented out bc to laggy
+    getgenv().clock = tick()
 game:GetService("RunService").RenderStepped:Connect(function()
 	while getgenv().clock + 1 / getgenv().fpscap > tick() do end
 	getgenv().clock = tick()
 
 	task.wait()
 end)]]
+-- creds to vxsty
+getgenv().mouse1click = function(x, y)
+	local vim = game:GetService('VirtualInputManager');
+    x = x or 0
+	y = y or 0
+	vim:SendMouseButtonEvent(x, y, 0, true, game, false)
+	task.wait()
+	vim:SendMouseButtonEvent(x, y, 0, false, game, false)
+end
+getgenv().mouse2click = function(x, y)
+    local vim = game:GetService('VirtualInputManager');
+	x = x or 0
+	y = y or 0
+	vim:SendMouseButtonEvent(x, y, 1, true, game, false)
+	task.wait()
+	vim:SendMouseButtonEvent(x, y, 1, false, game, false)
+end
+getgenv().mouse1press = function(x, y)
+    local vim = game:GetService('VirtualInputManager');
+	x = x or 0
+	y = y or 0
+	vim:SendMouseButtonEvent(x, y, 0, true, game, false)
+end
+getgenv().mouse1release = function(x, y)
+    local vim = game:GetService('VirtualInputManager');
+	x = x or 0
+	y = y or 0
+	vim:SendMouseButtonEvent(x, y, 0, false, game, false)
+end
+getgenv().mouse2press = function(x, y)
+    local vim = game:GetService('VirtualInputManager');
+	x = x or 0
+	y = y or 0
+	vim:SendMouseButtonEvent(x, y, 1, true, game, false)
+end
+getgenv().mouse2release = function(x, y)
+    local vim = game:GetService('VirtualInputManager');
+	x = x or 0
+	y = y or 0
+	vim:SendMouseButtonEvent(x, y, 1, false, game, false)
+end
+getgenv().mousescroll = function(x, y, a)
+    local vim = game:GetService('VirtualInputManager');
+	x = x or 0
+	y = y or 0
+	a = a and true or false
+	vim:SendMouseWheelEvent(x, y, a, game)
+end
+-- creds to vxsty
+local keys = {
+	[8] = Enum.KeyCode.Backspace,
+	[9] = Enum.KeyCode.Tab,
+	[12] = Enum.KeyCode.Clear,
+	[13] = Enum.KeyCode.Return,
+	[16] = Enum.KeyCode.LeftShift,
+	[17] = Enum.KeyCode.LeftControl,
+	[18] = Enum.KeyCode.LeftAlt,
+	[19] = Enum.KeyCode.Pause,
+	[20] = Enum.KeyCode.CapsLock,
+	[27] = Enum.KeyCode.Escape,
+	[32] = Enum.KeyCode.Space,
+	[33] = Enum.KeyCode.PageUp,
+	[34] = Enum.KeyCode.PageDown,
+	[35] = Enum.KeyCode.End,
+	[36] = Enum.KeyCode.Home,
+	[45] = Enum.KeyCode.Insert,
+	[46] = Enum.KeyCode.Delete,
+	[48] = Enum.KeyCode.Zero,
+	[49] = Enum.KeyCode.One,
+	[50] = Enum.KeyCode.Two,
+	[51] = Enum.KeyCode.Three,
+	[52] = Enum.KeyCode.Four,
+	[53] = Enum.KeyCode.Five,
+	[54] = Enum.KeyCode.Six,
+	[55] = Enum.KeyCode.Seven,
+	[56] = Enum.KeyCode.Eight,
+	[57] = Enum.KeyCode.Nine,
+	[65] = Enum.KeyCode.A,
+	[66] = Enum.KeyCode.B,
+	[67] = Enum.KeyCode.C,
+	[68] = Enum.KeyCode.D,
+	[69] = Enum.KeyCode.E,
+	[70] = Enum.KeyCode.F,
+	[71] = Enum.KeyCode.G,
+	[72] = Enum.KeyCode.H,
+	[73] = Enum.KeyCode.I,
+	[74] = Enum.KeyCode.J,
+	[75] = Enum.KeyCode.K,
+	[76] = Enum.KeyCode.L,
+	[77] = Enum.KeyCode.M,
+	[78] = Enum.KeyCode.N,
+	[79] = Enum.KeyCode.O,
+	[80] = Enum.KeyCode.P,
+	[81] = Enum.KeyCode.Q,
+	[82] = Enum.KeyCode.R,
+	[83] = Enum.KeyCode.S,
+	[84] = Enum.KeyCode.T,
+	[85] = Enum.KeyCode.U,
+	[86] = Enum.KeyCode.V,
+	[87] = Enum.KeyCode.W,
+	[88] = Enum.KeyCode.X,
+	[89] = Enum.KeyCode.Y,
+	[90] = Enum.KeyCode.Z,
+	[93] = Enum.KeyCode.Menu,
+	[96] = Enum.KeyCode.KeypadZero,
+	[97] = Enum.KeyCode.KeypadOne,
+	[98] = Enum.KeyCode.KeypadTwo,
+	[99] = Enum.KeyCode.KeypadThree,
+	[100] = Enum.KeyCode.KeypadFour,
+	[101] = Enum.KeyCode.KeypadFive,
+	[102] = Enum.KeyCode.KeypadSix,
+	[103] = Enum.KeyCode.KeypadSeven,
+	[104] = Enum.KeyCode.KeypadEight,
+	[105] = Enum.KeyCode.KeypadNine,
+	[106] = Enum.KeyCode.KeypadMultiply,
+	[107] = Enum.KeyCode.KeypadPlus,
+	[109] = Enum.KeyCode.KeypadMinus,
+	[110] = Enum.KeyCode.KeypadPeriod,
+	[111] = Enum.KeyCode.KeypadDivide,
+	[112] = Enum.KeyCode.F1,
+	[113] = Enum.KeyCode.F2,
+	[114] = Enum.KeyCode.F3,
+	[115] = Enum.KeyCode.F4,
+	[116] = Enum.KeyCode.F5,
+	[117] = Enum.KeyCode.F6,
+	[118] = Enum.KeyCode.F7,
+	[119] = Enum.KeyCode.F8,
+	[120] = Enum.KeyCode.F9,
+	[121] = Enum.KeyCode.F10,
+	[122] = Enum.KeyCode.F11,
+	[123] = Enum.KeyCode.F12,
+	[144] = Enum.KeyCode.NumLock,
+	[145] = Enum.KeyCode.ScrollLock,
+	[186] = Enum.KeyCode.Semicolon,
+	[187] = Enum.KeyCode.Equals,
+	[188] = Enum.KeyCode.Comma,
+	[189] = Enum.KeyCode.Minus,
+	[190] = Enum.KeyCode.Period,
+	[191] = Enum.KeyCode.Slash,
+	[192] = Enum.KeyCode.Backquote,
+	[219] = Enum.KeyCode.LeftBracket,
+	[221] = Enum.KeyCode.RightBracket,
+	[222] = Enum.KeyCode.Quote
+}
+getgenv().keyclick = function(key)
+    local vim = game:GetService('VirtualInputManager');
+	if not keys[key] then
+		return error("Key " .. tostring(key) .. ' not found!')
+	end
+	vim:SendKeyEvent(true, keys[key], false, game)
+	task.wait()
+	vim:SendKeyEvent(false, keys[key], false, game)
+end
+getgenv().keypress = function(key)
+    local vim = game:GetService('VirtualInputManager');
+	if not keys[key] then
+		return error("Key " .. tostring(key) .. ' not found!')
+	end
+	vim:SendKeyEvent(true, keys[key], false, game)
+end
+getgenv().keyrelease = function(key)
+    local vim = game:GetService('VirtualInputManager');
+	if not keys[key] then
+		return error("Key " .. tostring(key) .. ' not found!')
+	end
+	vim:SendKeyEvent(false, keys[key], false, game)
+end
+--[[
+-- must have write file
+-- put in auto exec
+if not isfolder("queue") then
+    makefolder("queue")
+end
+local rs = math.random(1,999999)
+getgenv().queue_on_teleport = function(code)
+    writefile("queue\\"..tostring(rs)..".lua", code)
+end
+--queue_on_teleport("testy")
+local files = listfiles("queue")
+if #files == 0 then
+    return
+end
+for i, v in pairs(files) do
+    pcall(function()
+        loadstring(readfile(v))()
+    end)
+    delfile(v)
+end]]
