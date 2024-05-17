@@ -1,7 +1,4 @@
 -- creds to vxsty
-if not getgenv().crypt then
-    getgenv().crypt = {}
-end
 getgenv().crypt.generatekey = function(optionalSize)
 	local key = ''
 	local a = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
@@ -9,5 +6,5 @@ getgenv().crypt.generatekey = function(optionalSize)
 		local n = math.random(1, #a)
 		key = key .. a:sub(n, n)
 	end
-	return funcs.base64.encode(key)
+	return getgenv().crypt.base64encode(key)
 end
