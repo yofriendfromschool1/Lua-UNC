@@ -168,7 +168,13 @@ getgenv().getcallingscript = function()
  end
  return nil
 end
-getgenv().gethui = game:GetService("CoreGui")
+getgenv().gethui = function()
+    if cloneref then
+        return cloneref(game:GetService("CoreGui"))
+    else
+        return game:GetService("CoreGui")
+    end
+end
 getgenv().getscripts = function()
 	local stuff = game:GetDescendants()
 	local scripts = {}
