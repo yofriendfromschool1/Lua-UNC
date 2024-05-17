@@ -1,47 +1,39 @@
-getgenv().setclipboard = function(text)
-    local Converted = {
-        ["_setcliptoclip"] = Instance.new("ScreenGui");
-        ["_TextBox"] = Instance.new("TextBox");
-        ["_LocalScript"] = Instance.new("LocalScript");
+-- creds to vxsty
+getgenv().setclipboard = function(data)
+    local vim = game:GetService('VirtualInputManager');
+    local old = game:GetService("UserInputService"):GetFocusedTextBox()
+    local copy = tostring(data)
+    local gui = Instance.new("ScreenGui", getgenv().gethui())
+    local a = Instance.new('TextBox', gui)
+    a.PlaceholderText = ''
+    a.Text = copy
+    a.ClearTextOnFocus = false
+    a.Size = UDim2.new(.1, 0, .15, 0)
+    a.Position = UDim2.new(10, 0, 10, 0)
+    a:CaptureFocus()
+    a = Enum.KeyCode
+    local Keys = {
+     a.RightControl, a.A
     }
-    
-    Converted["_setcliptoclip"].ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-    Converted["_setcliptoclip"].Name = "setcliptoclip"
-    Converted["_setcliptoclip"].Parent = game:GetService("CoreGui")
-    
-    Converted["_TextBox"].ClearTextOnFocus = false
-    Converted["_TextBox"].CursorPosition = -1
-    Converted["_TextBox"].Font = Enum.Font.SourceSans
-    Converted["_TextBox"].Text = text
-    Converted["_TextBox"].TextColor3 = Color3.fromRGB(0, 0, 0)
-    Converted["_TextBox"].TextSize = 14
-    Converted["_TextBox"].BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    Converted["_TextBox"].BorderColor3 = Color3.fromRGB(0, 0, 0)
-    Converted["_TextBox"].BorderSizePixel = 0
-    Converted["_TextBox"].Position = UDim2.new(0.48038584, 0, 0.471337587, 0)
-    Converted["_TextBox"].Size = UDim2.new(0, 200, 0, 50)
-    Converted["_TextBox"].Parent = Converted["_setcliptoclip"]
-    
-    local fake_module_scripts = {}
-    
-    
-    local function GBGAD_fake_script() -- Fake Script: StarterGui.setcliptoclip.TextBox.LocalScript
-        local script = Instance.new("LocalScript")
-        script.Name = "LocalScript"
-        script.Parent = Converted["_TextBox"]
-        local req = require
-        local require = function(obj)
-            local fake = fake_module_scripts[obj]
-            if fake then
-                return fake()
-            end
-            return req(obj)
-        end
-    
-        script.Parent.FocusLost:Connect(function()
-            script.Parent.Parent:Destroy()
-        end)
+    local Keys2 = {
+     a.RightControl, a.C, a.V
+    }
+    for i, v in ipairs(Keys) do
+     vim:SendKeyEvent(true, v, false, game)
+     task.wait()
     end
-    
-    coroutine.wrap(GBGAD_fake_script)()
+    for i, v in ipairs(Keys) do
+     vim:SendKeyEvent(false, v, false, game)
+     task.wait()
+    end
+    for i, v in ipairs(Keys2) do
+     vim:SendKeyEvent(true, v, false, game)
+     task.wait()
+    end
+    for i, v in ipairs(Keys2) do
+     vim:SendKeyEvent(false, v, false, game)
+     task.wait()
+    end
+    gui:Destroy()
+    if old then old:CaptureFocus() end
 end
