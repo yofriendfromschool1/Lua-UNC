@@ -69,7 +69,7 @@ getgenv().crypt.generatekey = function(optionalSize)
 		local n = math.random(1, #a)
 		key = key .. a:sub(n, n)
 	end
-	return funcs.base64.encode(key)
+	return getgenv().crypt.base64encode(key)
 end
 -- vxsty made this
 getgenv().debugg = {}
