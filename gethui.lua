@@ -1,4 +1,4 @@
-getgenv().gethui = :Connect(function()
+getgenv().gethui = function()
     if cloneref then
         return cloneref(game:GetService("CoreGui"))
     else
