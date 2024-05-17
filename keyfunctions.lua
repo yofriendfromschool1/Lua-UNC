@@ -117,18 +117,3 @@ getgenv().keyrelease = function(key)
 	end
 	vim:SendKeyEvent(false, keys[key], false, game)
 end
-getgenv().mousemoverel = function(relx, rely)
-    local vim = game:GetService('VirtualInputManager');
-	local Pos = workspace.CurrentCamera.ViewportSize
-	relx = relx or 0
-	rely = rely or 0
-	local x = Pos.X * relx
-	local y = Pos.Y * rely
-	vim:SendMouseMoveEvent(x, y, game)
-end
-getgenv().mousemoveabs = function(x, y)
-    local vim = game:GetService('VirtualInputManager');
-	x = x or 0
-	y = y or 0
-	vim:SendMouseMoveEvent(x, y, game)
-end
