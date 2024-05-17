@@ -2,7 +2,6 @@
 if not getgenv().crypt then
     getgenv().crypt = {}
 end
-if getgenv().crypt then
 getgenv().crypt.generatekey = function(optionalSize)
 	local key = ''
 	local a = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
