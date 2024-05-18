@@ -1,4 +1,4 @@
--- put this in autoexc for 44 unc things will add on or replace some so delete the ones you already have (that is if they work)
+-- put this in autoexc for 46 unc functions will add on or replace some so delete the ones you already have (that is if they work)
 -- 44/83 53% NOTE: u need to put queue_on_teleport in ur autoexec
 -- Shoutout to me (Sky/jazminethecooles2001), luau, and vxsty
 -- if this doesnt work try just executing this or executing the ones u need or one by one or so
