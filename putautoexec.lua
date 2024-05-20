@@ -117,7 +117,7 @@ getgenv().hookfunction = function(func, rep)
 	end
 end
 getgenv().identifyexecutor = function()
-    return "Sky's, Luau, vxsty UNC"
+    return "Sky's, Luau, vxsty, jLn0n UNC"
 end
 getgenv().iscclosure = function(func)
     local toreturn = false
