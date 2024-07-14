@@ -1,4 +1,4 @@
-getgenv().getplayers() = function()
+getgenv().getplayers = function()
     local players = {}
     for _, x in pairs(game:GetService("Players"):GetPlayers()) do
         players[x.Name] = x
