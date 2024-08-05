@@ -1,5 +1,5 @@
 -- put this in autoexc for 48 unc functions will add on or replace some so delete the ones you already have (that is if they work)
--- 54/112 48% NOTE: u need to put queue_on_teleport in ur autoexec
+-- 56/114 50% NOTE: u need to put queue_on_teleport in ur autoexec
 -- Shoutout to me (Sky/jazminethecooles2001), luau, and vxsty
 -- if this doesnt work try just executing this or executing the ones u need or one by one or so
 if not getgenv then
@@ -3125,6 +3125,48 @@ getgenv().runanimation = function(animationId, player)
         animation.AnimationId = "rbxassetid://" .. tostring(animationId)
         humanoid:LoadAnimation(animation):Play()
     end
+end
+getgenv().getlocalplayer = function()
+    return getplayer()
+end
+getgenv().getaffiliateid = function()
+    return "none"
+end
+getgenv().join = function(placeID, jobID)
+    game:GetService("TeleportService"):TeleportToPlaceInstance(placeID, jobID, getplayer())
+end
+getgenv().firetouchtransmitter = firetouchinterest
+getgenv().getplatform = function()
+	local inputsrv = game:GetService("UserInputService")
+	if inputsrv:GetPlatform() == Enum.Platform.Windows then
+		return 'Windows'
+	elseif inputsrv:GetPlatform() == Enum.Platform.OSX then
+		return 'macOS'
+	elseif inputsrv:GetPlatform() == Enum.Platform.IOS then
+		return 'iOS'
+	elseif inputsrv:GetPlatform() == Enum.Platform.UWP then
+		return 'Windows (Microsoft Store)'
+	elseif inputsrv:GetPlatform() == Enum.Platform.Android then
+		return 'Android'
+	else
+		return 'Unknown'
+	end
+end
+getgenv().getos = function()
+	local inputsrv = game:GetService("UserInputService")
+	if inputsrv:GetPlatform() == Enum.Platform.Windows then
+		return 'Windows'
+	elseif inputsrv:GetPlatform() == Enum.Platform.OSX then
+		return 'macOS'
+	elseif inputsrv:GetPlatform() == Enum.Platform.IOS then
+		return 'iOS'
+	elseif inputsrv:GetPlatform() == Enum.Platform.UWP then
+		return 'Windows (Microsoft Store)'
+	elseif inputsrv:GetPlatform() == Enum.Platform.Android then
+		return 'Android'
+	else
+		return 'Unknown'
+	end
 end
 --[[
 -- must have write file
