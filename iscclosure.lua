@@ -1,9 +1,8 @@
 getgenv().iscclosure = function(func)
-    local toreturn = false
     for i,v in pairs(getgenv()) do
         if v == func then
-            toreturn = true
+            return true
         end
     end
-    return toreturn
+    return false
 end
